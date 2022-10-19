@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
 
@@ -26,10 +27,17 @@ public class Functions
     {
         context.Logger.LogInformation("Get Request\n");
 
+        var query = request.QueryStringParameters;
+        var rsp = new
+        {
+            query,
+            message = "Hello Hello  "
+        };
+
         var response = new APIGatewayProxyResponse
         {
             StatusCode = (int) HttpStatusCode.OK,
-            Body = "Hello AWS Serverless",
+            Body = JsonSerializer.Serialize(rsp),
             Headers = new Dictionary<string, string> {{"Content-Type", "text/plain"}}
         };
 
